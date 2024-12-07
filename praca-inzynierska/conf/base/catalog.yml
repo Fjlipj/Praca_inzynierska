@@ -1,0 +1,3 @@
+raw_data:
+  type: pandas.CSVDataset
+  filepath: data/01_raw/dataset.csv
