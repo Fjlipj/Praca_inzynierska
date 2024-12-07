@@ -1,0 +1,31 @@
+[build-system]
+requires = [ "setuptools",]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "praca_inzynierska"
+readme = "README.md"
+dynamic = [ "dependencies", "version",]
+
+[project.scripts]
+praca-inzynierska = "praca_inzynierska.__main__:main"
+
+[tool.kedro]
+package_name = "praca_inzynierska"
+project_name = "praca-inzynierska"
+kedro_init_version = "0.19.5"
+tools = [ "Data Structure", "PySpark", "Kedro Viz",]
+example_pipeline = "False"
+source_dir = "src"
+
+[project.entry-points."kedro.hooks"]
+
+[tool.setuptools.dynamic.dependencies]
+file = "requirements.txt"
+
+[tool.setuptools.dynamic.version]
+attr = "praca_inzynierska.__version__"
+
+[tool.setuptools.packages.find]
+where = [ "src",]
+namespaces = false
