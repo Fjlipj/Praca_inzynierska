@@ -1,3 +1,12 @@
 dataset:
   type: pandas.CSVDataset
   filepath: data/01_raw/dataset.csv
+
+preprocessed_data:
+  type: pandas.ParquetDataset
+  filepath: data/02_intermediate/preprocessed_data.pq
+
+trained_model:
+  type: pickle.PickleDataset
+  filepath: data/06_models/model.pkl
+  versioned: false
