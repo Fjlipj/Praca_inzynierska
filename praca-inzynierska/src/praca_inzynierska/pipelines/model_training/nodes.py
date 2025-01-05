@@ -2,11 +2,14 @@
 This is a boilerplate pipeline 'model_training'
 generated using Kedro 0.19.5
 """
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score, accuracy_score
 import numpy as np
 import wandb
 import logging
+import pandas as pd
+from autogluon.tabular import TabularDataset, TabularPredictor
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score, accuracy_score
+
 
 def train_random_forest(X_train, y_train):
     """
@@ -64,6 +67,18 @@ def evaluate_model(model, X_test, y_test):
     )
 
     return metrics, y_pred
+
+def autoML(data: pd.DataFrame):
+    """
+    Train an AutoML model using AutoGluon TabularPredictor.
+    """
+    predictor = TabularPredictor(
+        label="Czas treningu (seconds)", 
+        eval_metric='mean_squared_error'
+    ).fit(data)
+    
+    return predictor
+
 
 def convert_seconds_to_time_str(seconds):
     """

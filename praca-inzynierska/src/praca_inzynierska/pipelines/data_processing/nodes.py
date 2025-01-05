@@ -43,6 +43,10 @@ def prepare_features_and_target(preprocessed_data):
     
     X = preprocessed_data[features]
     y = preprocessed_data['Czas treningu (seconds)']
+
+    # create charts for the model performance
+ 
+
     
     # Split the data
     X_train, X_test, y_train, y_test = train_test_split(
