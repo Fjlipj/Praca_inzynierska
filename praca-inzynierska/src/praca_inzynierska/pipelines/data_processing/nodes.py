@@ -27,6 +27,7 @@ def load_and_preprocess_data(dataset):
     dataset['month'] = dataset['Data'].dt.month
     dataset['day_of_week'] = dataset['Data'].dt.dayofweek
     
+    print(dataset)
     return dataset
 
 def prepare_features_and_target(preprocessed_data):
