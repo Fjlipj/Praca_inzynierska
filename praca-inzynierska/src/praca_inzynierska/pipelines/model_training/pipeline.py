@@ -17,7 +17,7 @@ def create_pipeline(**kwargs) -> Pipeline:
         ),
         node(
             func=evaluate_model,
-            inputs=["trained_model", "X_test", "y_test"],
+            inputs=["trained_model", "X_test", "y_test", "features"],
             outputs=["model_metrics", "predictions"],
             name="evaluate_model_node"
         ),

@@ -1,0 +1,38 @@
+{
+    "os": "macOS-15.2-arm64-arm-64bit",
+    "python": "3.10.14",
+    "heartbeatAt": "2025-01-18T12:45:22.570884",
+    "startedAt": "2025-01-18T12:45:21.436466",
+    "docker": null,
+    "cuda": null,
+    "args": [
+        "run"
+    ],
+    "state": "running",
+    "program": "/opt/anaconda3/envs/kedro/bin/kedro",
+    "codePathLocal": null,
+    "git": {
+        "remote": "git@github.com:Fjlipj/Praca_inzynierska.git",
+        "commit": "f5947b259405634c76ea8ec162a4c335e576d223"
+    },
+    "email": "filipjanikula@gmail.com",
+    "root": "/Users/filip/Documents/Studia/Praca inz\u0307ynierska/Praca_inzynierska",
+    "host": "macbook-pro-filip-2.home",
+    "username": "filip",
+    "executable": "/opt/anaconda3/envs/kedro/bin/python",
+    "cpu_count": 10,
+    "cpu_count_logical": 10,
+    "disk": {
+        "/": {
+            "total": 926.3517189025879,
+            "used": 753.5186347961426
+        }
+    },
+    "gpuapple": {
+        "type": "Apple M2 Pro",
+        "vendor": "sppci_vendor_Apple"
+    },
+    "memory": {
+        "total": 16.0
+    }
+}

@@ -17,7 +17,7 @@ def create_pipeline(**kwargs) -> Pipeline:
         node(
             func=prepare_features_and_target,
             inputs="preprocessed_data",
-            outputs=["X_train", "X_test", "y_train", "y_test", "scaler"],
+            outputs=["X_train", "X_test", "y_train", "y_test", "scaler", "features"],
             name="prepare_features_node"
         )
     ])

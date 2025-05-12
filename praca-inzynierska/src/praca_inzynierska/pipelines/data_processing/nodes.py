@@ -4,6 +4,8 @@ generated using Kedro 0.19.5
 """
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from datetime import datetime
@@ -27,6 +29,21 @@ def load_and_preprocess_data(dataset):
     dataset['month'] = dataset['Data'].dt.month
     dataset['day_of_week'] = dataset['Data'].dt.dayofweek
     
+    # Create correlation matrix
+    """
+    Create and save a correlation matrix heatmap
+    """
+    dataset_for_matrix = dataset
+    dataset_for_matrix.drop('Czas treningu' , axis=1, inplace=True)
+    plt.figure(figsize=(12, 8))
+    correlation_matrix = dataset_for_matrix.corr()
+    sns.heatmap(correlation_matrix, annot=True, vmax=1, vmin=-1, fmt=".2f", cmap="coolwarm")
+    plt.title("Correlation Matrix")
+    plt.tight_layout()
+    plt.savefig("correlation_matrix.png")
+    plt.close()
+
+
     print(dataset)
     return dataset
 
@@ -59,4 +76,4 @@ def prepare_features_and_target(preprocessed_data):
     X_train_scaled = scaler.fit_transform(X_train)
     X_test_scaled = scaler.transform(X_test)
     
-    return X_train_scaled, X_test_scaled, y_train.values, y_test.values, scaler
+    return X_train_scaled, X_test_scaled, y_train.values, y_test.values, scaler, X.columns

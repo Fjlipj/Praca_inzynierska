@@ -6,6 +6,8 @@ import numpy as np
 import wandb
 import logging
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 from autogluon.tabular import TabularDataset, TabularPredictor
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score, accuracy_score
@@ -23,7 +25,7 @@ def train_random_forest(X_train, y_train):
     rf_model.fit(X_train, y_train)
     return rf_model
 
-def evaluate_model(model, X_test, y_test):
+def evaluate_model(model, X_test, y_test, feature_names):
     """
     Evaluate the trained model
     """
@@ -51,20 +53,54 @@ def evaluate_model(model, X_test, y_test):
     print('\nErrors:\n')
     print(errors)
 
-    wandb.login(key="7cedcc8572677253cbaf3974533bf4979bb5e496")
+ # Residual plot
+    residuals = y_test - y_pred
+    plt.figure(figsize=(10, 6))
+    sns.histplot(residuals, kde=True, bins=30, color="blue")
+    plt.title("Residual Distribution")
+    plt.xlabel("Residuals")
+    plt.ylabel("Frequency")
+    plt.tight_layout()
+    plt.savefig("residual_distribution.png")
+    plt.close()
 
-    wandb.init(
-        # set the wandb project where this run will be logged
-        project="praca-inzynierska"
-    )
+    # Scatter plot of predictions vs actual values
+    plt.figure(figsize=(10, 6))
+    plt.scatter(y_test, y_pred, alpha=0.5)
+    plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], color='red', linestyle='--')
+    plt.title("Predictions vs Actual Values")
+    plt.xlabel("Actual Values")
+    plt.ylabel("Predicted Values")
+    plt.tight_layout()
+    plt.savefig("predictions_vs_actual.png")
+    plt.close()
 
-    wandb.log(
-        {
-            'Mean Absolute Error (seconds)': mae,
-            'Root Mean Squared Error (seconds)': rmse,
-            'R-squared': r2
-        }
-    )
+    # Feature importance (for tree-based models)
+    if hasattr(model, 'feature_importances_'):
+        feature_importances = model.feature_importances_
+        plt.figure(figsize=(10, 6))
+        sorted_idx = np.argsort(feature_importances)
+        plt.barh(feature_names[sorted_idx], feature_importances[sorted_idx])
+        plt.title("Feature Importances")
+        plt.tight_layout()
+        plt.savefig("feature_importances.png")
+        plt.close()
+
+
+    # wandb.login(key="7cedcc8572677253cbaf3974533bf4979bb5e496")
+
+    # wandb.init(
+    #     # set the wandb project where this run will be logged
+    #     project="praca-inzynierska"
+    # )
+
+    # wandb.log(
+    #     {
+    #         'Mean Absolute Error (seconds)': mae,
+    #         'Root Mean Squared Error (seconds)': rmse,
+    #         'R-squared': r2
+    #     }
+    # )
 
     return metrics, y_pred
 
