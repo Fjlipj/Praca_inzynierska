@@ -10,3 +10,8 @@ trained_model:
   type: pickle.PickleDataset
   filepath: data/06_models/model.pkl
   versioned: false
+
+trained_model_with_BPM:
+  type: pickle.PickleDataset
+  filepath: data/06_models/model_with_BPM.pkl
+  versioned: false
