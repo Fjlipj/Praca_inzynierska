@@ -23,13 +23,13 @@ def create_pipeline(**kwargs) -> Pipeline:
         ),
         node(
             func=train_neural_network,
-            inputs=["X_train", "y_train"],
+            inputs=["XX_train", "yy_train"],
             outputs="trained_neural_network",
             name="train_neural_network_node"
         ),
         node(
             func=evaluate_NN_model,
-            inputs=["trained_neural_network", "X_test", "y_test"],
+            inputs=["trained_neural_network", "XX_test", "yy_test", "features_for_refined_model"],
             outputs=["model_metrics_NN", "predictions_NN"],
             name="evaluate_NN_model_node"
         ),

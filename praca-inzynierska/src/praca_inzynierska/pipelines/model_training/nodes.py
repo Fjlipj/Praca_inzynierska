@@ -21,7 +21,7 @@ def train_random_forest(X_train, y_train):
     Train Random Forest Regressor
     """
     rf_model = RandomForestRegressor(
-        n_estimators=100, 
+        n_estimators=300, 
         random_state=42, 
         max_depth=10
     )
@@ -63,7 +63,7 @@ def train_neural_network(X_train, y_train):
     mlp_pipe.fit(X_train, y_train)
     return mlp_pipe
 
-def evaluate_NN_model(model, X_test, y_test):
+def evaluate_NN_model(model, X_test, y_test, feature_names):
     y_pred = model.predict(X_test)
     mae = mean_absolute_error(y_test, y_pred)
     mse = mean_squared_error(y_test, y_pred)
@@ -82,6 +82,39 @@ def evaluate_NN_model(model, X_test, y_test):
     errors = y_test - y_pred
     print('\nErrors:\n')
     print(errors)
+
+ # Residual plot
+    residuals = y_test - y_pred
+    plt.figure(figsize=(10, 6))
+    sns.histplot(residuals, kde=True, bins=30, color="blue")
+    plt.title("Residual Distribution")
+    plt.xlabel("Residuals")
+    plt.ylabel("Frequency")
+    plt.tight_layout()
+    plt.savefig("residual_distribution_NN.png")
+    plt.close()
+
+    # Scatter plot of predictions vs actual values
+    plt.figure(figsize=(10, 6))
+    plt.scatter(y_test, y_pred, alpha=0.5)
+    plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], color='red', linestyle='--')
+    plt.title("Predictions vs Actual Values")
+    plt.xlabel("Actual Values")
+    plt.ylabel("Predicted Values")
+    plt.tight_layout()
+    plt.savefig("predictions_vs_actual_NN.png")
+    plt.close()
+
+    # Feature importance (for tree-based models)
+    if hasattr(model, 'feature_importances_'):
+        feature_importances = model.feature_importances_
+        plt.figure(figsize=(10, 6))
+        sorted_idx = np.argsort(feature_importances)
+        plt.barh(feature_names[sorted_idx], feature_importances[sorted_idx])
+        plt.title("Feature Importances")
+        plt.tight_layout()
+        plt.savefig("feature_importances_NN.png")
+        plt.close()
 
     return metrics, y_pred
 

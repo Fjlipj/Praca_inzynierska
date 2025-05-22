@@ -12,12 +12,22 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from datetime import datetime
 
-def parse_time_duration(time_str):
-    """
-    Convert time string (HH:MM:SS) to total seconds
-    """
-    h, m, s = map(int, time_str.split(':'))
-    return h * 3600 + m * 60 + s
+def parse_time_duration(t: str | float) -> float:
+    """'HH:MM:SS' lub 'MM:SS' ➜ liczba sekund; NaN przy złym formacie."""
+    if pd.isna(t) or str(t).strip() == "":
+        return np.nan
+    parts = str(t).split(":")
+    try:
+        if len(parts) == 3:
+            h, m, s = map(int, parts)
+        elif len(parts) == 2:
+            h, m = map(int, parts)
+            s = 0
+        else:
+            return np.nan
+        return h * 3600 + m * 60 + s
+    except ValueError:
+        return np.nan
 
 def load_and_preprocess_data(dataset):
     """
@@ -30,6 +40,9 @@ def load_and_preprocess_data(dataset):
     dataset['Data'] = pd.to_datetime(dataset['Data'])
     dataset['month'] = dataset['Data'].dt.month
     dataset['day_of_week'] = dataset['Data'].dt.dayofweek
+    dataset["hour"] = dataset["Data"].dt.hour
+
+    dataset['kcal/dystans'] = dataset['Kcal (aktywnosc)'] / dataset['Dystans']
     
     # Create correlation matrix
     """
@@ -57,7 +70,7 @@ def prepare_features_and_target(preprocessed_data):
     features = [
         'Dystans', 'Kcal (aktywnosc)', 'Przewyzszenie (w metrach)', 
         'Srednia szybkosc', 'Srednie tetno',
-        'Temperatura', 'Wilgotnosc', 'Predkosc wiatru', 'Cisnienie', 'month', 'day_of_week'
+        'Temperatura', 'Wilgotnosc', 'Predkosc wiatru', 'Cisnienie', 'month', 'day_of_week', 'hour', 'kcal/dystans'
     ]
     
     X = preprocessed_data[features]
@@ -87,7 +100,7 @@ def prepare_features_and_target_for_refined_model(preprocessed_data):
         'Dystans', 'Kcal (aktywnosc)', 'Przewyzszenie (w metrach)', 
         'Srednia szybkosc', 'Srednie tetno',
         'Czas <135BPM' ,'Czas 136-149BPM', 'Czas 150-163BPM', 'Czas 164-177BPM','Czas > 178BPM',
-        'Temperatura', 'Wilgotnosc', 'Predkosc wiatru', 'Cisnienie', 'month', 'day_of_week'
+        'Temperatura', 'Wilgotnosc', 'Predkosc wiatru', 'Cisnienie', 'month', 'day_of_week', 'hour', 'kcal/dystans'
     ]
 
     XX = preprocessed_data[features]
