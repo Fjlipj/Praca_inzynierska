@@ -4,7 +4,7 @@ generated using Kedro 0.19.5
 """
 
 from kedro.pipeline import Pipeline, pipeline, node
-from .nodes import train_random_forest, train_random_forest_with_BPM, evaluate_model, evaluate_model_with_BPM, autoML
+from .nodes import train_random_forest, train_random_forest_with_BPM, evaluate_NN_model, evaluate_model, evaluate_model_with_BPM, autoML, train_neural_network
 
 
 def create_pipeline(**kwargs) -> Pipeline:
@@ -20,6 +20,18 @@ def create_pipeline(**kwargs) -> Pipeline:
             inputs=["XX_train", "yy_train"],
             outputs="trained_model_with_BPM",
             name="train_random_forest_with_BPM_node"
+        ),
+        node(
+            func=train_neural_network,
+            inputs=["X_train", "y_train"],
+            outputs="trained_neural_network",
+            name="train_neural_network_node"
+        ),
+        node(
+            func=evaluate_NN_model,
+            inputs=["trained_neural_network", "X_test", "y_test"],
+            outputs=["model_metrics_NN", "predictions_NN"],
+            name="evaluate_NN_model_node"
         ),
         node(
             func=evaluate_model,

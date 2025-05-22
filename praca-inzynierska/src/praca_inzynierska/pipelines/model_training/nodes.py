@@ -11,6 +11,9 @@ import seaborn as sns
 from autogluon.tabular import TabularDataset, TabularPredictor
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score, accuracy_score
+from sklearn.pipeline import Pipeline
+from sklearn.neural_network import MLPRegressor
+from sklearn.preprocessing import StandardScaler
 
 
 def train_random_forest(X_train, y_train):
@@ -36,6 +39,51 @@ def train_random_forest_with_BPM(XX_train, yy_train):
     )
     rf_model_with_BPM.fit(XX_train, yy_train)
     return rf_model_with_BPM
+
+def train_neural_network(X_train, y_train):
+    best_params = {
+        "hidden_layer_sizes": (128, 64, 32),
+        "alpha": 1e-2,                 # 0.01
+        "learning_rate_init": 1e-3,
+    }
+
+    mlp_pipe = Pipeline([
+        ("scaler", StandardScaler()),
+        ("mlp",   MLPRegressor(
+                    **best_params,
+                    learning_rate="adaptive",  # zostawiamy jak w gridzie
+                    max_iter=5000,
+                    early_stopping=True,
+                    n_iter_no_change=30,
+                    random_state=42,
+                )
+        ),
+    ])
+
+    mlp_pipe.fit(X_train, y_train)
+    return mlp_pipe
+
+def evaluate_NN_model(model, X_test, y_test):
+    y_pred = model.predict(X_test)
+    mae = mean_absolute_error(y_test, y_pred)
+    mse = mean_squared_error(y_test, y_pred)
+    rmse = np.sqrt(mse)
+    r2 = r2_score(y_test, y_pred)
+
+    metrics = {
+        'Mean Absolute Error (seconds)': mae,
+        'Root Mean Squared Error (seconds)': rmse,
+        'R-squared': r2
+    }
+    print('\n--------------------------------------\n')
+    print('\nMetrics Neural Network:\n')
+    print(metrics, y_pred)
+
+    errors = y_test - y_pred
+    print('\nErrors:\n')
+    print(errors)
+
+    return metrics, y_pred
 
 def evaluate_model(model, X_test, y_test, feature_names):
     """
@@ -146,7 +194,7 @@ def evaluate_model_with_BPM(model, XX_test, yy_test, feature_names):
 
  # Residual plot
     residuals = yy_test - y_pred
-    plt.figure(figsize=(14, 6))
+    plt.figure(figsize=(10, 6))
     sns.histplot(residuals, kde=True, bins=30, color="blue")
     plt.title("Residual Distribution")
     plt.xlabel("Residuals")
@@ -156,7 +204,7 @@ def evaluate_model_with_BPM(model, XX_test, yy_test, feature_names):
     plt.close()
 
     # Scatter plot of predictions vs actual values
-    plt.figure(figsize=(14, 6))
+    plt.figure(figsize=(10, 6))
     plt.scatter(yy_test, y_pred, alpha=0.5)
     plt.plot([yy_test.min(), yy_test.max()], [yy_test.min(), yy_test.max()], color='red', linestyle='--')
     plt.title("Predictions vs Actual Values")
@@ -169,7 +217,7 @@ def evaluate_model_with_BPM(model, XX_test, yy_test, feature_names):
     # Feature importance (for tree-based models)
     if hasattr(model, 'feature_importances_'):
         feature_importances = model.feature_importances_
-        plt.figure(figsize=(14, 6))
+        plt.figure(figsize=(10, 6))
         sorted_idx = np.argsort(feature_importances)
         plt.barh(feature_names[sorted_idx], feature_importances[sorted_idx])
         plt.title("Feature Importances")
