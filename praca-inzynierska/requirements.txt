@@ -7,3 +7,10 @@ kedro-telemetry>=0.3.1
 kedro-viz>=6.7.0
 notebook
 setuptools; python_version >= "3.12"
+numpy
+pandas
+matplotlib
+seaborn
+autogluon
+sklearn
+joblib

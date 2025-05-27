@@ -180,21 +180,6 @@ def evaluate_model(model, X_test, y_test, feature_names):
         plt.close()
 
 
-    # wandb.login(key="7cedcc8572677253cbaf3974533bf4979bb5e496")
-
-    # wandb.init(
-    #     # set the wandb project where this run will be logged
-    #     project="praca-inzynierska"
-    # )
-
-    # wandb.log(
-    #     {
-    #         'Mean Absolute Error (seconds)': mae,
-    #         'Root Mean Squared Error (seconds)': rmse,
-    #         'R-squared': r2
-    #     }
-    # )
-
     return metrics, y_pred
 
 def evaluate_model_with_BPM(model, XX_test, yy_test, feature_names):
@@ -207,10 +192,6 @@ def evaluate_model_with_BPM(model, XX_test, yy_test, feature_names):
     mse = mean_squared_error(yy_test, y_pred)
     rmse = np.sqrt(mse)
     r2 = r2_score(yy_test, y_pred)
-
-    #score = accuracy_score(y_test, y_pred)
-    #logger = logging.getLogger(__name__)
-    #logger.info("Model has a coefficient prediction of %.3f on test data.", score)
 
     
     metrics = {
