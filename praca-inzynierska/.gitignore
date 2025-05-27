@@ -8,8 +8,6 @@ conf/local/**
 # ignore potentially sensitive credentials files
 conf/**/*credentials*
 
-# ignore everything in the following folders
-data/**
 
 # except their sub-folders
 !data/**/
