@@ -196,7 +196,7 @@ weather_option = st.radio(
 )
 
 if weather_option == "Pobierz z API":
-    city = st.text_input("Nazwa miasta", value="Kraków", placeholder="np. Warszawa, Kraków, Gdańsk")
+    city = st.text_input("Nazwa miasta", value="Warszawa", placeholder="np. Warszawa, Kraków, Gdańsk")
     
     # Auto-fetch weather when city changes
     if city != st.session_state.last_city and city.strip():
