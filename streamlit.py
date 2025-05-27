@@ -32,7 +32,7 @@ DEFAULT_WEATHER = {"Temperatura": 19.06, "Wilgotnosc": 59.4, "Predkosc wiatru": 
 try:
     API_KEY = st.secrets["OPENWEATHER_API_KEY"]
 except KeyError:
-    st.error("❌ Brak klucza API OpenWeatherMap. Skontaktuj się z administratorem.")
+    st.error("❌ Brak klucza API OpenWeatherMap.")
     st.stop()
 
 # Średnia prędkość (km/h) w zależności od intensywności
@@ -171,13 +171,11 @@ if 'weather_data' not in st.session_state:
 if 'last_city' not in st.session_state:
     st.session_state.last_city = ""
 
-st.title("🚴‍♂️ Predykcja czasu przejazdu z danymi pogodowymi")
+st.title("🚴‍♂️ Predykcja czasu przejazdu używając modelu Random Forest")
 
 st.markdown("""
-Aplikacja przewiduje czas treningu na podstawie:
-1. Parametrów treningu (dystans, intensywność)
-2. Aktualnych danych pogodowych (API lub własne)
-3. Szczegółowych stref tętna (opcjonalnie)
+Wprowadź parametry treningu i dane pogodowe, aby obliczyć czas przejazdu.
+Możesz skorzystać z przygotowanych przedziałów intensywności lub wprowadzić własne dane.
 """)
 
 # Podstawowe parametry treningu
